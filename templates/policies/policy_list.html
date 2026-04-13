@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-list"></i> Firewall Policies</h2>
+            <a href="{% url 'policies:policy-create' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> New Policy
+            </a>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Search by name or description"
+                               value="{{ request.GET.search|default:'' }}">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="status" class="form-control">
+                            <option value="">All Statuses</option>
+                            <option value="enabled" {% if request.GET.status == 'enabled' %}selected{% endif %}>Enabled</option>
+                            <option value="disabled" {% if request.GET.status == 'disabled' %}selected{% endif %}>Disabled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Policies Table -->
+        {% if policies %}
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Priority</th>
+                            <th>Name</th>
+                            <th>Source Zone</th>
+                            <th>Dest Zone</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Logging</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for policy in policies %}
+                        <tr>
+                            <td><strong>{{ policy.priority }}</strong></td>
+                            <td>
+                                <a href="{% url 'policies:policy-detail' policy.pk %}">
+                                    {{ policy.name }}
+                                </a>
+                            </td>
+                            <td>{{ policy.source_zone.name }}</td>
+                            <td>{{ policy.destination_zone.name }}</td>
+                            <td>
+                                <span class="badge badge-{{ policy.action|lower }}">
+                                    {{ policy.get_action_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if policy.enabled %}
+                                <span class="badge bg-success">Enabled</span>
+                                {% else %}
+                                <span class="badge bg-danger">Disabled</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if policy.logging_enabled %}
+                                <i class="fas fa-check text-success"></i>
+                                {% else %}
+                                <i class="fas fa-times text-danger"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'policies:policy-detail' policy.pk %}" 
+                                   class="btn btn-sm btn-info" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'policies:policy-update' policy.pk %}" 
+                                   class="btn btn-sm btn-warning" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'policies:policy-delete' policy.pk %}" 
+                                   class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No policies found. 
+            <a href="{% url 'policies:policy-create' %}">Create one now</a>.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

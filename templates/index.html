@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <h1 class="mb-4">
+                    <i class="fas fa-shield-alt" style="color: #0f3460;"></i> Juniper Firewall Administration
+                </h1>
+                <p class="lead text-muted">Welcome to the Juniper Firewall Policy Manager</p>
+                
+                {% if user.is_authenticated %}
+                <div class="row mt-5">
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-list"></i> Policies</h5>
+                                <p class="card-text display-6">{{ policies_count|default:'0' }}</p>
+                                <a href="{% url 'policies:policy-list' %}" class="btn btn-sm btn-primary">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-th"></i> Zones</h5>
+                                <p class="card-text display-6">{{ zones_count|default:'0' }}</p>
+                                <a href="{% url 'policies:zone-list' %}" class="btn btn-sm btn-primary">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-map-marker"></i> Addresses</h5>
+                                <p class="card-text display-6">{{ addresses_count|default:'0' }}</p>
+                                <a href="{% url 'admin:policies_address_changelist' %}" class="btn btn-sm btn-primary">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-network-wired"></i> Services</h5>
+                                <p class="card-text display-6">{{ services_count|default:'0' }}</p>
+                                <a href="{% url 'admin:policies_service_changelist' %}" class="btn btn-sm btn-primary">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <a href="{% url 'policies:policy-create' %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-plus"></i> Create New Policy
+                    </a>
+                </div>
+                {% else %}
+                <p class="mt-4">Please <a href="{% url 'admin:login' %}">log in</a> to manage policies.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

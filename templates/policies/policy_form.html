@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2 class="mb-4">
+            {% if policy %}Edit Policy{% else %}Create New Policy{% endif %}
+        </h2>
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">
+                            {{ form.name.label }}
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger small">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.priority.id_for_label }}" class="form-label">
+                                    {{ form.priority.label }}
+                                </label>
+                                {{ form.priority }}
+                                {% if form.priority.errors %}
+                                <div class="text-danger small">{{ form.priority.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.action.id_for_label }}" class="form-label">
+                                    {{ form.action.label }}
+                                </label>
+                                {{ form.action }}
+                                {% if form.action.errors %}
+                                <div class="text-danger small">{{ form.action.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.source_zone.id_for_label }}" class="form-label">
+                                    {{ form.source_zone.label }}
+                                </label>
+                                {{ form.source_zone }}
+                                {% if form.source_zone.errors %}
+                                <div class="text-danger small">{{ form.source_zone.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.destination_zone.id_for_label }}" class="form-label">
+                                    {{ form.destination_zone.label }}
+                                </label>
+                                {{ form.destination_zone }}
+                                {% if form.destination_zone.errors %}
+                                <div class="text-danger small">{{ form.destination_zone.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.source_addresses.id_for_label }}" class="form-label">
+                            {{ form.source_addresses.label }}
+                        </label>
+                        {{ form.source_addresses }}
+                        {% if form.source_addresses.errors %}
+                        <div class="text-danger small">{{ form.source_addresses.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.destination_addresses.id_for_label }}" class="form-label">
+                            {{ form.destination_addresses.label }}
+                        </label>
+                        {{ form.destination_addresses }}
+                        {% if form.destination_addresses.errors %}
+                        <div class="text-danger small">{{ form.destination_addresses.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.services.id_for_label }}" class="form-label">
+                            {{ form.services.label }}
+                        </label>
+                        {{ form.services }}
+                        {% if form.services.errors %}
+                        <div class="text-danger small">{{ form.services.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                        <div class="text-danger small">{{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                {{ form.enabled }}
+                                <label for="{{ form.enabled.id_for_label }}" class="form-check-label">
+                                    {{ form.enabled.label }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                {{ form.logging_enabled }}
+                                <label for="{{ form.logging_enabled.id_for_label }}" class="form-check-label">
+                                    {{ form.logging_enabled.label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Policy
+                        </button>
+                        <a href="{% url 'policies:policy-list' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
